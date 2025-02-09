@@ -1,6 +1,7 @@
 package assignment.library.domain.book.controller;
 
 import assignment.library.domain.book.dto.request.RegisterBookRequest;
+import assignment.library.domain.book.dto.request.UpdateBookRequest;
 import assignment.library.domain.book.dto.response.BookInfoResponse;
 import assignment.library.domain.book.service.BookService;
 import assignment.library.domain.user.dto.response.UserInfoResponse;
@@ -43,5 +44,16 @@ public class BookController {
 
         return ResponseEntity.status(OK).body(bookInfo);
     }
+
+    // 도서 수정
+    @PutMapping("/update")
+    @Operation(summary = "도서 정보 수정", description = "도서 정보 수정 API")
+    public ResponseEntity<?> updateBook(@RequestParam(required = false) Long bookId,
+                                        @RequestBody UpdateBookRequest updateBookRequest) {
+        bookService.updateBook(bookId, updateBookRequest);
+
+        return ResponseEntity.status(OK).build();
+    }
+
 
 }

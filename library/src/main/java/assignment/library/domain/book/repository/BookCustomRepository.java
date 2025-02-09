@@ -1,5 +1,6 @@
 package assignment.library.domain.book.repository;
 
+import assignment.library.domain.book.dto.request.UpdateBookRequest;
 import assignment.library.domain.book.dto.response.BookInfoResponse;
 import assignment.library.domain.book.dto.response.QBookInfoResponse;
 import assignment.library.domain.book.entity.QBook;
@@ -23,14 +24,29 @@ public class BookCustomRepository {
 
     public List<BookInfoResponse> getBookInfo(Long bookId) {
         return queryFactory
-                .select(new QBookInfoResponse(book.bookId, book.title, book.author, book.isbn, book.publisher,
-                        book.publishedDate, book.category, book.tag, book.status))
+                .select(new QBookInfoResponse(book.bookId, book.title, book.author, book.isbn,
+                        book.publisher, book.publishedDate, book.category, book.tag, book.status))
                 .from(book)
                 .where(bookIdEq(bookId))
                 .fetch();
     }
 
+    public void updateBook(Long bookId, UpdateBookRequest updateBookRequest) {
+        queryFactory
+                .update(book)
+                .set(book.title, updateBookRequest.getTitle())
+                .set(book.author, updateBookRequest.getAuthor())
+                .set(book.isbn, updateBookRequest.getIsbn())
+                .set(book.publisher, updateBookRequest.getPublisher())
+                .set(book.publishedDate, updateBookRequest.getPublishedDate())
+                .set(book.category, updateBookRequest.getCategory())
+                .set(book.tag, updateBookRequest.getTag())
+                .where(bookIdEq(bookId))
+                .execute();
+    }
+
     private BooleanExpression bookIdEq(Long bookId) {
         return isEmpty(bookId) ? null : book.bookId.eq(bookId);
     }
+
 }

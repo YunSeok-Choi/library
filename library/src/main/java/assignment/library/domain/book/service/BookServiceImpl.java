@@ -1,6 +1,7 @@
 package assignment.library.domain.book.service;
 
 import assignment.library.domain.book.dto.request.RegisterBookRequest;
+import assignment.library.domain.book.dto.request.UpdateBookRequest;
 import assignment.library.domain.book.dto.response.BookInfoResponse;
 import assignment.library.domain.book.entity.Book;
 import assignment.library.domain.book.repository.BookCustomRepository;
@@ -29,5 +30,10 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookInfoResponse> getBookInfo(Long bookId) {
         return bookCustomRepository.getBookInfo(bookId);
+    }
+
+    @Override
+    public void updateBook(Long bookId, UpdateBookRequest updateBookRequest) {
+        bookCustomRepository.updateBook(bookId, updateBookRequest);
     }
 }
