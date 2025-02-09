@@ -33,7 +33,7 @@ public class User {
     }
 
     @Builder
-    public User(String userEmail, String userPassword, String userName, String userNickname,  LocalDateTime createdAt){
+    public User(String userEmail, String userPassword, String userName, String userNickname, LocalDateTime createdAt) {
         this.userEmail = userEmail;
         this.userPassword = userPassword;
         this.userName = userName;

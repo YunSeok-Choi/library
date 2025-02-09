@@ -1,16 +1,19 @@
 package assignment.library.domain.user.controller;
 
 import assignment.library.domain.user.dto.request.SignUpRequest;
+import assignment.library.domain.user.dto.response.UserInfoResponse;
 import assignment.library.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/api/user")
@@ -26,6 +29,19 @@ public class UserController {
     public ResponseEntity<?> signUp(@RequestBody SignUpRequest signUpRequest) {
         userService.signUp(signUpRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    // 사용자 조회
+    @GetMapping("/info")
+    @Operation(summary = "사용자 정보 조회", description = "사용자 정보 조회 API")
+    public ResponseEntity<?> userInfo(@RequestParam(required = false) Long userId) {
+
+        List<UserInfoResponse> userInfo = userService.getUserInfo(userId);
+        if (userInfo.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        return ResponseEntity.status(OK).body(userInfo);
     }
 
 

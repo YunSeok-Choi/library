@@ -15,7 +15,7 @@ public class SignUpRequest {
 
     private String userPassword;
 
-    public User toEntity(){
+    public User toEntity() {
         return User.builder()
                 .userEmail(userEmail)
                 .userPassword(userPassword)
