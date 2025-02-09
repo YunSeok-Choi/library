@@ -36,4 +36,9 @@ public class BookServiceImpl implements BookService {
     public void updateBook(Long bookId, UpdateBookRequest updateBookRequest) {
         bookCustomRepository.updateBook(bookId, updateBookRequest);
     }
+
+    @Override
+    public void deleteBook(Long bookId) {
+        bookCustomRepository.deleteBook(bookId);
+    }
 }

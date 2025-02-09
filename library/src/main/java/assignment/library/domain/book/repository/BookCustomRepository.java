@@ -45,6 +45,13 @@ public class BookCustomRepository {
                 .execute();
     }
 
+    public void deleteBook(Long bookId) {
+        queryFactory
+                .delete(book)
+                .where(bookIdEq(bookId))
+                .execute();
+    }
+
     private BooleanExpression bookIdEq(Long bookId) {
         return isEmpty(bookId) ? null : book.bookId.eq(bookId);
     }

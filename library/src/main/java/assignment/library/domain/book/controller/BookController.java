@@ -55,5 +55,13 @@ public class BookController {
         return ResponseEntity.status(OK).build();
     }
 
+    // 도서 삭제
+    @DeleteMapping("/delete")
+    @Operation(summary = "도서 삭제", description = "도서 삭제 API")
+    public ResponseEntity<?> deleteBook(@RequestParam(required = false) Long bookId) {
+        bookService.deleteBook(bookId);
+        return ResponseEntity.status(OK).build();
+    }
+
 
 }

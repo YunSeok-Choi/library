@@ -11,4 +11,5 @@ public interface BookService {
     void registerBook(RegisterBookRequest registerBookRequest);
     List<BookInfoResponse> getBookInfo(Long bookId);
     void updateBook(Long bookId, UpdateBookRequest updateBookRequest);
+    void deleteBook(Long bookId);
 }
