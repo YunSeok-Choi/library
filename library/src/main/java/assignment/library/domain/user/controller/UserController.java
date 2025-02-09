@@ -22,7 +22,6 @@ public class UserController {
 
     // 사용자 등록
     @PostMapping("/signUp")
-    @Tag(name = "User API")
     @Operation(summary = "회원가입", description = "회원가입 API")
     public ResponseEntity<?> signUp(@RequestBody SignUpRequest signUpRequest) {
         userService.signUp(signUpRequest);
