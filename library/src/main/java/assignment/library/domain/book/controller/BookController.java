@@ -25,7 +25,7 @@ public class BookController {
     private final BookService bookService;
 
     // 도서 등록
-    @PostMapping("/registerBook")
+    @PostMapping("/register")
     @Operation(summary = "도서 등록", description = "도서 등록 API")
     public ResponseEntity<?> registerBook(@RequestBody RegisterBookRequest registerBookRequest) {
         bookService.registerBook(registerBookRequest);

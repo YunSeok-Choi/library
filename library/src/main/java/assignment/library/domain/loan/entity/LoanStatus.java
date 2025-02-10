@@ -1,13 +1,13 @@
-package assignment.library.domain.book.entity;
+package assignment.library.domain.loan.entity;
 
-public enum BookStatus {
-    AVAILABLE("대출 가능"),
+public enum LoanStatus {
     LOANED("대출 중"),
-    RESERVED("예약됨");
+    RETURNED("반납 완료"),
+    OVERDUE("연체");
 
     private final String description;
 
-    BookStatus(String description) {
+    LoanStatus(String description) {
         this.description = description;
     }
 
