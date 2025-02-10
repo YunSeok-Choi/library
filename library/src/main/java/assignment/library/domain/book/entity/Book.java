@@ -38,6 +38,10 @@ public class Book {
         this.updatedAt = LocalDateTime.now();
     }
 
+    public void loanedBook() {
+        this.status = BookStatus.LOANED;
+    }
+
     @Builder
     public Book(Long bookId, String title, String author, String isbn, String publisher, String publishedDate,
                 String category, String tag, BookStatus status, LocalDateTime createdAt) {

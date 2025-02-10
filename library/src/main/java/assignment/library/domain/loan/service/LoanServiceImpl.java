@@ -3,8 +3,10 @@ package assignment.library.domain.loan.service;
 import assignment.library.domain.book.entity.Book;
 import assignment.library.domain.book.repository.BookRepository;
 import assignment.library.domain.loan.dto.request.LoanBookRequest;
+import assignment.library.domain.loan.dto.response.LoanStatusResponse;
 import assignment.library.domain.loan.entity.Loan;
 import assignment.library.domain.loan.entity.LoanStatus;
+import assignment.library.domain.loan.repository.LoanCustomRepository;
 import assignment.library.domain.loan.repository.LoanRepository;
 import assignment.library.domain.user.entity.User;
 import assignment.library.domain.user.repository.UserRepository;
@@ -24,6 +26,7 @@ public class LoanServiceImpl implements LoanService {
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
     private final LoanRepository loanRepository;
+    private final LoanCustomRepository loanCustomRepository;
 
     @Override
     public void loanBook(LoanBookRequest loanBookRequest) {
@@ -48,6 +51,13 @@ public class LoanServiceImpl implements LoanService {
                 .build();
 
         loanRepository.save(loan);
+        book.loanedBook();
+        bookRepository.save(book);
 
+    }
+
+    @Override
+    public LoanStatusResponse getLoanStatus(Long bookId) {
+        return loanCustomRepository.getLoanStatus(bookId);
     }
 }
