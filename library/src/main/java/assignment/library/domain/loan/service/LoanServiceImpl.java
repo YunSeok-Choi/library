@@ -58,6 +58,47 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public LoanStatusResponse getLoanStatus(Long bookId) {
-        return loanCustomRepository.getLoanStatus(bookId);
+
+        Loan loanStatus = loanCustomRepository.getLoanStatus(bookId);
+        Book book = bookRepository.findById(bookId).orElse(null);
+
+        LoanStatusResponse.LoanStatusResponseBuilder responseBuilder;
+
+        responseBuilder = LoanStatusResponse.builder()
+                .bookId(book.getBookId())
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .isbn(book.getIsbn())
+                .publisher(book.getPublisher())
+                .publishedDate(book.getPublishedDate())
+                .category(book.getCategory())
+                .tag(book.getTag())
+                .bookStatus(book.getStatus().getDescription());
+
+        if (loanStatus != null) {
+            responseBuilder
+                    .loanId(loanStatus.getLoanId())
+                    .userName(loanStatus.getUser().getUserName())
+                    .loanDate(loanStatus.getLoanDate())
+                    .dueDate(loanStatus.getDueDate())
+                    .returnDate(loanStatus.getReturnDate())
+                    .loanStatus(loanStatus.getStatus().getDescription());
+        }
+
+        return responseBuilder.build();
+
+    }
+
+    @Override
+    public void returnBook(Long bookId) {
+        Loan loanStatus = loanCustomRepository.getLoanStatus(bookId);
+        Book book = bookRepository.findById(bookId).orElse(null);
+
+        loanStatus.returnBook();
+        book.availableBook();
+
+        loanRepository.save(loanStatus);
+        bookRepository.save(book);
+
     }
 }

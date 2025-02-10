@@ -6,4 +6,5 @@ import assignment.library.domain.loan.dto.response.LoanStatusResponse;
 public interface LoanService {
     void loanBook(LoanBookRequest loanBookRequest);
     LoanStatusResponse getLoanStatus(Long bookId);
+    void returnBook(Long bookId);
 }

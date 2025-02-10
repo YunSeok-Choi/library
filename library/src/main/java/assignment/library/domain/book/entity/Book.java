@@ -42,6 +42,10 @@ public class Book {
         this.status = BookStatus.LOANED;
     }
 
+    public void availableBook() {
+        this.status = BookStatus.AVAILABLE;
+    }
+
     @Builder
     public Book(Long bookId, String title, String author, String isbn, String publisher, String publishedDate,
                 String category, String tag, BookStatus status, LocalDateTime createdAt) {

@@ -37,6 +37,11 @@ public class Loan {
     private LoanStatus status;
     private LocalDateTime createdAt;
 
+    public void returnBook() {
+        this.returnDate = LocalDateTime.now();
+        this.status = LoanStatus.RETURNED;
+    }
+
     @Builder
     public Loan(Long loanId, User user, Book book, LocalDateTime loanDate, LocalDateTime dueDate,
                 LocalDateTime returnDate, LoanStatus status, LocalDateTime createdAt) {

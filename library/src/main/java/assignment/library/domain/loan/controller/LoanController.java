@@ -1,6 +1,5 @@
 package assignment.library.domain.loan.controller;
 
-import assignment.library.domain.book.dto.request.RegisterBookRequest;
 import assignment.library.domain.loan.dto.request.LoanBookRequest;
 import assignment.library.domain.loan.dto.response.LoanStatusResponse;
 import assignment.library.domain.loan.service.LoanService;
@@ -32,5 +31,13 @@ public class LoanController {
     public ResponseEntity<?> loanStatus(@PathVariable Long bookId) {
         LoanStatusResponse loanStatus = loanService.getLoanStatus(bookId);
         return ResponseEntity.status(HttpStatus.OK).body(loanStatus);
+    }
+
+    // 도서 반납
+    @PatchMapping("/{bookId}")
+    @Operation(summary = "도서 반납", description = "도서 반납 API")
+    public ResponseEntity<?> returnBook(@PathVariable Long bookId) {
+        loanService.returnBook(bookId);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
