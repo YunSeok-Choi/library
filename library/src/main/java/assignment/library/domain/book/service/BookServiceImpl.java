@@ -8,6 +8,7 @@ import assignment.library.domain.book.repository.BookCustomRepository;
 import assignment.library.domain.book.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ public class BookServiceImpl implements BookService {
     private final BookCustomRepository bookCustomRepository;
 
     @Override
+    @CacheEvict(value = "bookInfo", key = "#bookId != null ? #bookId : 'defaultKey'", allEntries = true)
     public void registerBook(RegisterBookRequest registerBookRequest) {
         Book book = registerBookRequest.toEntity();
 
@@ -36,13 +38,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @CacheEvict(value = "bookInfo", key = "#bookId != null ? #bookId : 'defaultKey'")
+    @CacheEvict(value = "bookInfo", key = "#bookId != null ? #bookId : 'defaultKey'", allEntries = true)
     public void updateBook(Long bookId, UpdateBookRequest updateBookRequest) {
         bookCustomRepository.updateBook(bookId, updateBookRequest);
     }
 
     @Override
-    @CacheEvict(value = "bookInfo", key = "#bookId != null ? #bookId : 'defaultKey'")
+    @CacheEvict(value = "bookInfo", key = "#bookId != null ? #bookId : 'defaultKey'", allEntries = true)
     public void deleteBook(Long bookId) {
         bookCustomRepository.deleteBook(bookId);
     }
