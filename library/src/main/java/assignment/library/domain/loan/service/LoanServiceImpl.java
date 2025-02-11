@@ -12,6 +12,8 @@ import assignment.library.domain.user.entity.User;
 import assignment.library.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +31,7 @@ public class LoanServiceImpl implements LoanService {
     private final LoanCustomRepository loanCustomRepository;
 
     @Override
+    @CacheEvict(value = "loanStatus", key = "#loanBookRequest.bookId")
     public void loanBook(LoanBookRequest loanBookRequest) {
         Long userId = loanBookRequest.getUserId();
         Long bookId = loanBookRequest.getBookId();
@@ -57,6 +60,7 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
+    @Cacheable(value = "loanStatus", key = "#bookId", unless = "#result == null")
     public LoanStatusResponse getLoanStatus(Long bookId) {
 
         Loan loanStatus = loanCustomRepository.getLoanStatus(bookId);
@@ -79,9 +83,9 @@ public class LoanServiceImpl implements LoanService {
             responseBuilder
                     .loanId(loanStatus.getLoanId())
                     .userName(loanStatus.getUser().getUserName())
-                    .loanDate(loanStatus.getLoanDate())
-                    .dueDate(loanStatus.getDueDate())
-                    .returnDate(loanStatus.getReturnDate())
+                    .loanDate(loanStatus.getLoanDate().toString())
+                    .dueDate(loanStatus.getDueDate().toString())
+                    .returnDate(loanStatus.getReturnDate() == null ? null : loanStatus.getReturnDate().toString())
                     .loanStatus(loanStatus.getStatus().getDescription());
         }
 
@@ -90,6 +94,7 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
+    @CacheEvict(value = "loanStatus", key = "#bookId")
     public void returnBook(Long bookId) {
         Loan loanStatus = loanCustomRepository.getLoanStatus(bookId);
         Book book = bookRepository.findById(bookId).orElse(null);

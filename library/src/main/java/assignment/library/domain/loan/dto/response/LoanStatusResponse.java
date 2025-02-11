@@ -5,22 +5,21 @@ import assignment.library.domain.loan.entity.LoanStatus;
 import com.querydsl.core.annotations.QueryProjection;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @ToString
+@NoArgsConstructor
 public class LoanStatusResponse {
 
     private Long loanId;
     private String userName;
     private Long bookId;
-    private LocalDateTime loanDate;
-    private LocalDateTime dueDate;
-    private LocalDateTime returnDate;
+    private String loanDate;
+    private String dueDate;
+    private String returnDate;
     private String loanStatus;
     private String title;
     private String author;
@@ -32,8 +31,8 @@ public class LoanStatusResponse {
     private String bookStatus;
 
     @Builder
-    public LoanStatusResponse(Long loanId, String userName, Long bookId, LocalDateTime loanDate,
-                              LocalDateTime dueDate, LocalDateTime returnDate, String loanStatus,
+    public LoanStatusResponse(Long loanId, String userName, Long bookId, String loanDate,
+                              String dueDate, String returnDate, String loanStatus,
                               String title, String author, String isbn, String publisher,
                               String publishedDate, String category, String tag, String bookStatus) {
         this.loanId = loanId;
