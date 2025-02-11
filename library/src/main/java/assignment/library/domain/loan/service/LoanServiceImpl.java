@@ -14,10 +14,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+
+import static assignment.library.global.util.RedisConstants.BOOK_INFO;
+import static assignment.library.global.util.RedisConstants.LOAN_STATUS;
 
 @Slf4j
 @Service
@@ -31,7 +35,11 @@ public class LoanServiceImpl implements LoanService {
     private final LoanCustomRepository loanCustomRepository;
 
     @Override
-    @CacheEvict(value = "loanStatus", key = "#loanBookRequest.bookId")
+    @Caching(evict = {
+            @CacheEvict(value = LOAN_STATUS, key = "#loanBookRequest.bookId"),
+            @CacheEvict(value = BOOK_INFO, key = "#loanBookRequest.bookId"),
+            @CacheEvict(value = BOOK_INFO, key = "'allBookInfoKey'")
+    })
     public void loanBook(LoanBookRequest loanBookRequest) {
         Long userId = loanBookRequest.getUserId();
         Long bookId = loanBookRequest.getBookId();
@@ -60,7 +68,7 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
-    @Cacheable(value = "loanStatus", key = "#bookId", unless = "#result == null")
+    @Cacheable(value = LOAN_STATUS, key = "#bookId", unless = "#result == null")
     public LoanStatusResponse getLoanStatus(Long bookId) {
 
         Loan loanStatus = loanCustomRepository.getLoanStatus(bookId);
@@ -94,7 +102,11 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
-    @CacheEvict(value = "loanStatus", key = "#bookId")
+    @Caching(evict = {
+            @CacheEvict(value = LOAN_STATUS, key = "#bookId"),
+            @CacheEvict(value = BOOK_INFO, key = "#bookId"),
+            @CacheEvict(value = BOOK_INFO, key = "T(assignment.library.global.util.RedisConstants).ALL_BOOK_INFO_KEY")
+    })
     public void returnBook(Long bookId) {
         Loan loanStatus = loanCustomRepository.getLoanStatus(bookId);
         Book book = bookRepository.findById(bookId).orElse(null);
