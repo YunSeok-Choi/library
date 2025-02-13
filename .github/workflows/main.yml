@@ -66,6 +66,7 @@ jobs:
         if: always()
         with:
           report_paths: "./library/build/test-results/test/TEST-*.xml"
+          token: ${{ secrets.GIT_HUB_TOKEN }}
 
       - name: Test Fail
         if: failure()
