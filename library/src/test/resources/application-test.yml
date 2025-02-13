@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    writer:
+      hikari:
+        driver-class-name: org.h2.Driver
+        jdbc-url: jdbc:h2:mem:writer;
+        read-only: false
+        username: sa
+        password:
+    reader:
+      hikari:
+        driver-class-name: org.h2.Driver
+        jdbc-url: jdbc:h2:mem:reader;
+        read-only: true
+        username: sa
+        password:
