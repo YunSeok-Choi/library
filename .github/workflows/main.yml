@@ -130,6 +130,6 @@ jobs:
             pwd
             docker compose stop backend
             docker compose rm -f backend
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/library
-            sudo docker compose up -d run -d backend
-            sudo docker image prune -f
+            docker pull ${{ secrets.DOCKER_USERNAME }}/library
+            docker compose up -d run -d ${{ secrets.DOCKER_USERNAME }}/library
+            docker image prune -f
