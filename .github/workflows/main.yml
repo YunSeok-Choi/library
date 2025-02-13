@@ -84,8 +84,9 @@ jobs:
       - name: Docker build & push to prod
         if: contains(github.ref, 'main')
         run: |
-          ls
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          pwd
+          ls
           docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/library .
           docker push ${{ secrets.DOCKER_USERNAME }}/library
 
