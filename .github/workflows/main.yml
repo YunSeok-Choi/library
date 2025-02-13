@@ -76,7 +76,6 @@ jobs:
         if: always()
         with:
           report_paths: "./library/build/test-results/test/TEST-*.xml"
-          token: ${{ github.token }}
 
       - name: Test Fail
         if: failure()
