@@ -54,9 +54,9 @@ jobs:
       # gradle build test
       - name: Build with Gradle
         run: |
-          cd /home/runner/work/library/library/library
+          cd ./library
           chmod +x gradlew
-          ./gradlew build
+          ./gradlew clean build --no-daemon
 
       # - name: Debug Test Results
       #   run: |
