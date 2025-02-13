@@ -58,17 +58,16 @@ jobs:
           chmod +x gradlew
           ./gradlew build -x test
 
-      - name: Debug Test Results
-        run: |
-          pwd
-          ls
-          ls -al ./build/test-results/test
+      # - name: Debug Test Results
+      #   run: |
+      #     pwd
+      #     ls
 
       - name: Failure Test
         uses: mikepenz/action-junit-report@v5
         if: always()
         with:
-          report_paths: "./build/test-results/test/TEST-*.xml"
+          report_paths: "./library/build/test-results/test/TEST-*.xml"
           token: ${{ github.token }}
 
       - name: Test Fail
