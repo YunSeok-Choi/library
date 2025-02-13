@@ -127,7 +127,6 @@ jobs:
           key: ${{ secrets.PEM_KEY }}
           script: |
             cd Library
-            pwd
             docker compose stop backend
             docker compose rm -f backend
             docker pull ${{ secrets.DOCKER_USERNAME }}/library
