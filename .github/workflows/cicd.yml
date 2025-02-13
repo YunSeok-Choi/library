@@ -109,11 +109,8 @@ jobs:
           key: ${{ secrets.PEM_KEY }}
           script: |
             cd Library
-            docker compose stop backend
-            docker compose rm -f backend
-            docker pull ${{ secrets.DOCKER_USERNAME }}/library
-            docker compose up -d backend
-            docker image prune -f
+            chmod +x deploy.sh
+            sudo deploy.sh
 
       ## deploy to develop
       - name: Deploy to dev
@@ -127,8 +124,5 @@ jobs:
           key: ${{ secrets.PEM_KEY }}
           script: |
             cd Library
-            docker compose stop backend
-            docker compose rm -f backend
-            docker pull ${{ secrets.DOCKER_USERNAME }}/library-dev
-            docker compose up -d backend
-            docker image prune -f
+            sudo chmod +x deploy.sh
+            sudo deploy.sh
