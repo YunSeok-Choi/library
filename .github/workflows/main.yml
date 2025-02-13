@@ -54,6 +54,13 @@ jobs:
           echo "${{ secrets.YML_PROD }}" > ./application-prod.yml
         shell: bash
 
+      # run test code
+      - name: Run Tests with Gradle
+        run: |
+          cd /home/runner/work/library/library/library
+          chmod +x gradlew
+          ./gradlew test
+
       # gradle build test
       - name: Build with Gradle
         run: |
