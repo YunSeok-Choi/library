@@ -56,7 +56,7 @@ jobs:
         run: |
           cd /home/runner/work/library/library/library
           chmod +x gradlew
-          ./gradlew build -x test
+          ./gradlew build
 
       # - name: Debug Test Results
       #   run: |
