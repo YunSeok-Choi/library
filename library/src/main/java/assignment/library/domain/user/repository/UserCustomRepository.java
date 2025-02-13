@@ -19,7 +19,6 @@ public class UserCustomRepository {
     private final JPAQueryFactory queryFactory;
 
     public List<UserInfoResponse> getUsersInfo(Long userId) {
-
         return queryFactory
                 .select(new QUserInfoResponse(user.userId, user.userName, user.userEmail, user.userPassword))
                 .from(user)
