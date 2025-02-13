@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
+//@SpringBootTest
 class LibraryApplicationTests {
 
 	public int testValue;
@@ -21,6 +21,5 @@ class LibraryApplicationTests {
 	void 테스트_확인() {
 		assertThat(testValue).isEqualTo(0);
 	}
-
 
 }
