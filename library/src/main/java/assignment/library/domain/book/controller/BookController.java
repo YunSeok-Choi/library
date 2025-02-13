@@ -51,7 +51,6 @@ public class BookController {
     public ResponseEntity<?> updateBook(@RequestParam(required = false) Long bookId,
                                         @RequestBody UpdateBookRequest updateBookRequest) {
         bookService.updateBook(bookId, updateBookRequest);
-
         return ResponseEntity.status(OK).build();
     }
 
