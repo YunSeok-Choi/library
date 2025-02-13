@@ -66,6 +66,9 @@ jobs:
         if: failure()
         with:
           report_paths: "./backend/build/test-results/test/TEST-*.xml"
+
+      - name: Test Fail
+        if: failure()
         run: exit 1
 
       # docker build & push to production
