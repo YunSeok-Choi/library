@@ -57,8 +57,12 @@ jobs:
           cd /home/runner/work/library/library/library
           chmod +x gradlew
           ./gradlew build -x test
+
+      - name: Debug Test Results
+        run: |
           pwd
           ls
+          ls -al ./build/test-results/test
 
       - name: Failure Test
         uses: mikepenz/action-junit-report@v5
