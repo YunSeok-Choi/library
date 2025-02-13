@@ -62,10 +62,10 @@ jobs:
           ./gradlew build -x test
 
       - name: Failure Test
-        uses: mikepenz/action-junit-report@v3
-        if: failure()
+        uses: mikepenz/action-junit-report@v5
+        if: always()
         with:
-          report_paths: "./backend/build/test-results/test/TEST-*.xml"
+          report_paths: "./library/build/test-results/test/TEST-*.xml"
 
       - name: Test Fail
         if: failure()
