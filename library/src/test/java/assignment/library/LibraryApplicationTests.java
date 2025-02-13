@@ -23,7 +23,7 @@ class LibraryApplicationTests {
 
 	@Test
 	void 테스트_확인() {
-		assertThat(testValue).isEqualTo(0);
+		assertThat(testValue).isEqualTo(1);
 	}
 
 
