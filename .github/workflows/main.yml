@@ -15,7 +15,7 @@ jobs:
         with:
           character set server: "utf8"
           mysql database: "mysql"
-          mysql user: "${{screts.MYSQL_USER}}"
+          mysql user: "${{secrets.MYSQL_USER}}"
           mysql password: "${{secrets.MYSQL_PASSWORD}}"
 
       # JDK setting - github actions에서 사용할 JDK 설정 (프로젝트나 AWS의 java 버전과 달라도 무방)
