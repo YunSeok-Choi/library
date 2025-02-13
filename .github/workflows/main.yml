@@ -109,6 +109,7 @@ jobs:
           key: ${{ secrets.PEM_KEY }}
           envs: GITHUB_SHA
           script: |
+            cd Library
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/library
             sudo docker run -d -p 8082:8082 ${{ secrets.DOCKER_USERNAME }}/library
             sudo docker image prune -f
@@ -125,6 +126,8 @@ jobs:
           port: 22
           key: ${{ secrets.PEM_KEY }}
           script: |
+            cd Library
+            pwd
             docker compose stop backend
             docker compose rm -f backend
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/library
