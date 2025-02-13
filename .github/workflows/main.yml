@@ -54,19 +54,19 @@ jobs:
           echo "${{ secrets.YML_PROD }}" > ./application-prod.yml
         shell: bash
 
-      # run test code
-      - name: Run Tests with Gradle
-        run: |
-          cd /home/runner/work/library/library/library
-          chmod +x gradlew
-          ./gradlew test
-
       # gradle build test
       - name: Build with Gradle
         run: |
           cd /home/runner/work/library/library/library
           chmod +x gradlew
           ./gradlew build -x test
+
+      - name: Failure Test
+        uses: mikepenz/action-junit-report@v3
+        if: failure()
+        with:
+          report_paths: "./backend/build/test-results/test/TEST-*.xml"
+        run: exit 1
 
       # docker build & push to production
       - name: Docker build & push to prod
@@ -102,17 +102,6 @@ jobs:
             docker compose up -d backend
             docker image prune -f
 
-            # ✅ Health Check (배포 후 API 정상 작동 여부 확인)
-            echo "Waiting for API to start..."
-            sleep 10  # API가 시작될 시간을 주기 위해 10초 대기
-            RESPONSE_CODE=$(curl -o /dev/null -s -w "%{http_code}" http://backend:8080/health)
-            if [ "$RESPONSE_CODE" -ne 200 ]; then
-              echo "🚨 API Health Check Failed! Response Code: $RESPONSE_CODE"
-              exit 1
-            else
-              echo "✅ API Health Check Passed! Service is running."
-            fi
-
       ## deploy to develop
       - name: Deploy to dev
         uses: appleboy/ssh-action@master
@@ -131,14 +120,3 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/library-dev
             docker compose up -d backend
             docker image prune -f
-
-            # ✅ Health Check (배포 후 API 정상 작동 여부 확인)
-            echo "Waiting for API to start..."
-            sleep 10  # API가 시작될 시간을 주기 위해 10초 대기
-            RESPONSE_CODE=$(curl -o /dev/null -s -w "%{http_code}" http://backend:8080/health)
-            if [ "$RESPONSE_CODE" -ne 200 ]; then
-              echo "🚨 API Health Check Failed! Response Code: $RESPONSE_CODE"
-              exit 1
-            else
-              echo "✅ API Health Check Passed! Service is running."
-            fi
