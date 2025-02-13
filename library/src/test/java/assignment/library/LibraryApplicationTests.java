@@ -18,10 +18,6 @@ class LibraryApplicationTests {
 	}
 
 	@Test
-	void contextLoads() {
-	}
-
-	@Test
 	void 테스트_확인() {
 		assertThat(testValue).isEqualTo(1);
 	}
