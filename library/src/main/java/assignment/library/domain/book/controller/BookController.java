@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class BookController {
     // 도서 등록
     @PostMapping("/register")
     @Operation(summary = "도서 등록", description = "도서 등록 API")
-    public ResponseEntity<?> registerBook(@RequestBody RegisterBookRequest registerBookRequest) {
+    public ResponseEntity<?> registerBook(@Validated @RequestBody RegisterBookRequest registerBookRequest) {
         bookService.registerBook(registerBookRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -49,7 +50,7 @@ public class BookController {
     @PutMapping("/update")
     @Operation(summary = "도서 정보 수정", description = "도서 정보 수정 API")
     public ResponseEntity<?> updateBook(@RequestParam(required = false) Long bookId,
-                                        @RequestBody UpdateBookRequest updateBookRequest) {
+                                        @Validated @RequestBody UpdateBookRequest updateBookRequest) {
         bookService.updateBook(bookId, updateBookRequest);
         return ResponseEntity.status(OK).build();
     }

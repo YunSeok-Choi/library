@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -22,7 +23,7 @@ public class Book {
     private String author;
     private String isbn;
     private String publisher;
-    private String publishedDate;
+    private LocalDate publishedDate;
     private String category;
     private String tag;
 
@@ -47,7 +48,7 @@ public class Book {
     }
 
     @Builder
-    public Book(Long bookId, String title, String author, String isbn, String publisher, String publishedDate,
+    public Book(Long bookId, String title, String author, String isbn, String publisher, LocalDate publishedDate,
                 String category, String tag, BookStatus status, LocalDateTime createdAt) {
         this.bookId = bookId;
         this.title = title;

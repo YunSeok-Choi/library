@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,7 +18,7 @@ public class BookInfoResponse {
     private String author;
     private String isbn;
     private String publisher;
-    private String publishedDate;
+    private LocalDate publishedDate;
     private String category;
     private String tag;
     private String status;
@@ -24,7 +26,7 @@ public class BookInfoResponse {
     @Builder
     @QueryProjection
     public BookInfoResponse(Long bookId, String title, String author, String isbn, String publisher,
-                            String publishedDate, String category, String tag, BookStatus status) {
+                            LocalDate publishedDate, String category, String tag, BookStatus status) {
         this.bookId = bookId;
         this.title = title;
         this.author = author;

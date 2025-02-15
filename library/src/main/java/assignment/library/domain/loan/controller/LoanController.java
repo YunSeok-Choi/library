@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,7 +21,7 @@ public class LoanController {
     // 대출 등록
     @PostMapping()
     @Operation(summary = "대출 등록", description = "대출 등록 API")
-    public ResponseEntity<?> loanBook(@RequestBody LoanBookRequest loanBookRequest) {
+    public ResponseEntity<?> loanBook(@Validated @RequestBody LoanBookRequest loanBookRequest) {
         loanService.loanBook(loanBookRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

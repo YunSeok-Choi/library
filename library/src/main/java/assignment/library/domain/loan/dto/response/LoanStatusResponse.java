@@ -7,7 +7,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @ToString
@@ -25,7 +27,7 @@ public class LoanStatusResponse {
     private String author;
     private String isbn;
     private String publisher;
-    private String publishedDate;
+    private LocalDate publishedDate;
     private String category;
     private String tag;
     private String bookStatus;
@@ -34,7 +36,7 @@ public class LoanStatusResponse {
     public LoanStatusResponse(Long loanId, String userName, Long bookId, String loanDate,
                               String dueDate, String returnDate, String loanStatus,
                               String title, String author, String isbn, String publisher,
-                              String publishedDate, String category, String tag, String bookStatus) {
+                              LocalDate publishedDate, String category, String tag, String bookStatus) {
         this.loanId = loanId;
         this.userName = userName;
         this.bookId = bookId;

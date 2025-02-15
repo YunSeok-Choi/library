@@ -105,7 +105,7 @@ public class LoanServiceImpl implements LoanService {
     @Caching(evict = {
             @CacheEvict(value = LOAN_STATUS, key = "#bookId"),
             @CacheEvict(value = BOOK_INFO, key = "#bookId"),
-            @CacheEvict(value = BOOK_INFO, key = "T(assignment.library.global.util.RedisConstants).ALL_BOOK_INFO_KEY")
+            @CacheEvict(value = BOOK_INFO, key = "'allBookInfoKey'")
     })
     public void returnBook(Long bookId) {
         Loan loanStatus = loanCustomRepository.getLoanStatus(bookId);

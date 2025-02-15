@@ -26,7 +26,7 @@ public class BookServiceImpl implements BookService {
     private final BookCustomRepository bookCustomRepository;
 
     @Override
-    @CacheEvict(value = BOOK_INFO, key = ALL_BOOK_INFO_KEY)
+    @CacheEvict(value = BOOK_INFO, key = "'allBookInfoKey'")
     public void registerBook(RegisterBookRequest registerBookRequest) {
         Book book = registerBookRequest.toEntity();
 
@@ -34,8 +34,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Cacheable(value = BOOK_INFO,
-            key = "#bookId != null ? #bookId : T(assignment.library.global.util.RedisConstants).ALL_BOOK_INFO_KEY",
+    @Cacheable(
+            value = BOOK_INFO,
+            key = "#bookId != null ? #bookId : 'allBookInfoKey'",
             unless = "#result == null or #result.isEmpty()")
     public List<BookInfoResponse> getBookInfo(Long bookId) {
         return bookCustomRepository.getBookInfo(bookId);
@@ -43,10 +44,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Caching(evict = {
-            @CacheEvict(
-                    value = BOOK_INFO,
-                    key = "#bookId != null ?" +
-                            " #bookId : T(assignment.library.global.util.RedisConstants).ALL_BOOK_INFO_KEY"),
+            @CacheEvict(value = BOOK_INFO, key = "#bookId != null ? #bookId : 'allBookInfoKey'"),
             @CacheEvict(value = LOAN_STATUS, key = "#bookId")
     })
     public void updateBook(Long bookId, UpdateBookRequest updateBookRequest) {
@@ -55,9 +53,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Caching(evict = {
-            @CacheEvict(value = BOOK_INFO,
-                    key = "#bookId != null ?" +
-                            " #bookId : T(assignment.library.global.util.RedisConstants).ALL_BOOK_INFO_KEY"),
+            @CacheEvict(value = BOOK_INFO, key = "#bookId != null ? #bookId : 'allBookInfoKey'"),
             @CacheEvict(value = LOAN_STATUS, key = "#bookId")
     })
     public void deleteBook(Long bookId) {
