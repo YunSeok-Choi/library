@@ -62,6 +62,23 @@
         </rollingPolicy>
     </appender>
 
+    <property name="LOKI_URL" value="http://loki:3100/loki/api/v1/push"/>
+
+    <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+        <http>
+            <url>${LOKI_URL}</url>
+        </http>
+        <format>
+            <label>
+                <pattern>service_name=${LOKI_SERVICE},host=${HOSTNAME},level=%level,env=${LOKI_ENV}</pattern>
+                <readMarkers>true</readMarkers>
+            </label>
+            <message>
+                <pattern>t=%d{yyyy-MM-dd HH:mm:ss.SSS} l=%level c=%logger{20} t=%thread | %msg %ex</pattern>
+            </message>
+        </format>
+    </appender>
+
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="INFO_LOG"/>
