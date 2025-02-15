@@ -8,6 +8,8 @@ import assignment.library.domain.user.dto.response.UserInfoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -38,9 +40,11 @@ public class BookController {
     @Operation(summary = "도서 정보 조회", description = "도서 정보 조회 API")
     public ResponseEntity<?> bookInfo(@RequestParam(required = false) Long bookId,
                                       @RequestParam(required = false) String bookTitle,
-                                      @RequestParam(required = false) String bookAuthor) {
+                                      @RequestParam(required = false) String bookAuthor,
+                                      @RequestParam(required = false) String sorted,
+                                      Pageable pageable) {
 
-        List<BookInfoResponse> bookInfo = bookService.getBookInfo(bookId, bookTitle, bookAuthor);
+        Page<BookInfoResponse> bookInfo = bookService.getBookInfo(bookId, bookTitle, bookAuthor, sorted, pageable);
         if (bookInfo.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }

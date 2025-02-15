@@ -3,9 +3,14 @@ package assignment.library.domain.book.repository;
 import assignment.library.domain.book.dto.request.UpdateBookRequest;
 import assignment.library.domain.book.dto.response.BookInfoResponse;
 import assignment.library.domain.book.dto.response.QBookInfoResponse;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,13 +24,32 @@ public class BookCustomRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<BookInfoResponse> getBookInfo(Long bookId, String bookTitle, String bookAuthor) {
-        return queryFactory
+    public Page<BookInfoResponse> getBookInfo(Long bookId, String bookTitle, String bookAuthor, String sorted, Pageable pageable) {
+        List<BookInfoResponse> bookList = queryFactory
                 .select(new QBookInfoResponse(book.bookId, book.title, book.author, book.isbn,
                         book.publisher, book.publishedDate, book.category, book.tag, book.status))
                 .from(book)
-                .where(bookIdEq(bookId), bookTitleContains(bookTitle), bookAuthorContains(bookAuthor))
+                .where(
+                        bookIdEq(bookId),
+                        bookTitleContains(bookTitle),
+                        bookAuthorContains(bookAuthor)
+                )
+                .orderBy(getSortOrder(sorted))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        long total = queryFactory
+                .select(book)
+                .from(book)
+                .where(
+                        bookIdEq(bookId),
+                        bookTitleContains(bookTitle),
+                        bookAuthorContains(bookAuthor)
+                )
+                .fetch().size();
+
+        return new PageImpl<BookInfoResponse>(bookList, pageable, total);
     }
 
     public void updateBook(Long bookId, UpdateBookRequest updateBookRequest) {
@@ -59,6 +83,14 @@ public class BookCustomRepository {
 
     private BooleanExpression bookAuthorContains(String bookAuthor) {
         return isEmpty(bookAuthor) ? null : book.author.contains(bookAuthor);
+    }
+
+    private OrderSpecifier<?> getSortOrder(String sorted) {
+        return switch (sorted) {
+            case "title" -> book.title.asc();
+            case "publishedDate" -> book.publishedDate.asc();
+            default -> book.bookId.asc();
+        };
     }
 
 

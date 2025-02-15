@@ -10,10 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static assignment.library.global.util.RedisConstants.*;
 
@@ -39,8 +39,8 @@ public class BookServiceImpl implements BookService {
             key = "#bookId != null ? #bookId : 'allBookInfoKey'",
             condition = "#bookId != null || (#bookTitle == null && #bookAuthor == null)",
             unless = "#result == null or #result.isEmpty()")
-    public List<BookInfoResponse> getBookInfo(Long bookId, String bookTitle, String bookAuthor) {
-        return bookCustomRepository.getBookInfo(bookId, bookTitle, bookAuthor);
+    public Page<BookInfoResponse> getBookInfo(Long bookId, String bookTitle, String bookAuthor, String sorted, Pageable pageable) {
+        return bookCustomRepository.getBookInfo(bookId, bookTitle, bookAuthor, sorted, pageable);
     }
 
     @Override
