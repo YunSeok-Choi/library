@@ -41,10 +41,11 @@ public class BookController {
     public ResponseEntity<?> bookInfo(@RequestParam(required = false) Long bookId,
                                       @RequestParam(required = false) String bookTitle,
                                       @RequestParam(required = false) String bookAuthor,
+                                      @RequestParam(required = false) String bookTag,
                                       @RequestParam(required = false) String sorted,
                                       Pageable pageable) {
 
-        Page<BookInfoResponse> bookInfo = bookService.getBookInfo(bookId, bookTitle, bookAuthor, sorted, pageable);
+        Page<BookInfoResponse> bookInfo = bookService.getBookInfo(bookId, bookTitle, bookTag, bookAuthor, sorted, pageable);
         if (bookInfo.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }

@@ -39,8 +39,8 @@ public class BookServiceImpl implements BookService {
             key = "#bookId != null ? #bookId : 'allBookInfoKey'",
             condition = "#bookId != null || (#bookTitle == null && #bookAuthor == null)",
             unless = "#result == null or #result.isEmpty()")
-    public Page<BookInfoResponse> getBookInfo(Long bookId, String bookTitle, String bookAuthor, String sorted, Pageable pageable) {
-        return bookCustomRepository.getBookInfo(bookId, bookTitle, bookAuthor, sorted, pageable);
+    public Page<BookInfoResponse> getBookInfo(Long bookId, String bookTitle, String bookTag, String bookAuthor, String sorted, Pageable pageable) {
+        return bookCustomRepository.getBookInfo(bookId, bookTitle, bookTag, bookAuthor, sorted, pageable);
     }
 
     @Override

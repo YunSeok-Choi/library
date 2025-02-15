@@ -24,7 +24,7 @@ public class BookCustomRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public Page<BookInfoResponse> getBookInfo(Long bookId, String bookTitle, String bookAuthor, String sorted, Pageable pageable) {
+    public Page<BookInfoResponse> getBookInfo(Long bookId, String bookTitle, String bookTag, String bookAuthor, String sorted, Pageable pageable) {
         List<BookInfoResponse> bookList = queryFactory
                 .select(new QBookInfoResponse(book.bookId, book.title, book.author, book.isbn,
                         book.publisher, book.publishedDate, book.category, book.tag, book.status))
@@ -32,6 +32,7 @@ public class BookCustomRepository {
                 .where(
                         bookIdEq(bookId),
                         bookTitleContains(bookTitle),
+                        bookTagContains(bookTag),
                         bookAuthorContains(bookAuthor)
                 )
                 .orderBy(getSortOrder(sorted))
@@ -45,6 +46,7 @@ public class BookCustomRepository {
                 .where(
                         bookIdEq(bookId),
                         bookTitleContains(bookTitle),
+                        bookTagContains(bookTag),
                         bookAuthorContains(bookAuthor)
                 )
                 .fetch().size();
@@ -81,11 +83,19 @@ public class BookCustomRepository {
         return isEmpty(bookTitle) ? null : book.title.contains(bookTitle);
     }
 
+    private BooleanExpression bookTagContains(String bookTag) {
+        return isEmpty(bookTag) ? null : book.tag.contains(bookTag);
+    }
+
     private BooleanExpression bookAuthorContains(String bookAuthor) {
         return isEmpty(bookAuthor) ? null : book.author.contains(bookAuthor);
     }
 
     private OrderSpecifier<?> getSortOrder(String sorted) {
+        if (isEmpty(sorted)) {
+            return book.bookId.asc();
+        }
+
         return switch (sorted) {
             case "title" -> book.title.asc();
             case "publishedDate" -> book.publishedDate.asc();
