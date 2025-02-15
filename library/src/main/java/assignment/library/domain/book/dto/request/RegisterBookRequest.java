@@ -8,11 +8,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.hibernate.validator.constraints.ISBN;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static assignment.library.domain.book.dto.BookConstants.*;
+import static org.hibernate.validator.constraints.ISBN.Type.ANY;
 
 
 @Getter
@@ -29,6 +31,7 @@ public class RegisterBookRequest {
     private String author;
 
     @Schema(description = BOOK_ISBN, example = EX_BOOK_ISBN)
+    @ISBN(type = ANY)
     @NotBlank(message = CHECK_BOOK_ISBN)
     private String isbn;
 
