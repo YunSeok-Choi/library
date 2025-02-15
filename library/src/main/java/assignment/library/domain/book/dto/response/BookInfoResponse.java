@@ -18,7 +18,7 @@ public class BookInfoResponse {
     private String author;
     private String isbn;
     private String publisher;
-    private LocalDate publishedDate;
+    private String publishedDate;
     private String category;
     private String tag;
     private String status;
@@ -32,7 +32,7 @@ public class BookInfoResponse {
         this.author = author;
         this.isbn = isbn;
         this.publisher = publisher;
-        this.publishedDate = publishedDate;
+        this.publishedDate = publishedDate.toString();
         this.category = category;
         this.tag = tag;
         this.status = status.getDescription();

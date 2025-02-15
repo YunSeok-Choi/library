@@ -3,8 +3,6 @@ package assignment.library.domain.book.repository;
 import assignment.library.domain.book.dto.request.UpdateBookRequest;
 import assignment.library.domain.book.dto.response.BookInfoResponse;
 import assignment.library.domain.book.dto.response.QBookInfoResponse;
-import assignment.library.domain.book.entity.QBook;
-import assignment.library.domain.user.dto.response.QUserInfoResponse;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static assignment.library.domain.book.entity.QBook.book;
-import static assignment.library.domain.user.entity.QUser.user;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Repository
@@ -22,12 +19,12 @@ public class BookCustomRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<BookInfoResponse> getBookInfo(Long bookId) {
+    public List<BookInfoResponse> getBookInfo(Long bookId, String bookTitle, String bookAuthor) {
         return queryFactory
                 .select(new QBookInfoResponse(book.bookId, book.title, book.author, book.isbn,
                         book.publisher, book.publishedDate, book.category, book.tag, book.status))
                 .from(book)
-                .where(bookIdEq(bookId))
+                .where(bookIdEq(bookId), bookTitleContains(bookTitle), bookAuthorContains(bookAuthor))
                 .fetch();
     }
 
@@ -55,5 +52,14 @@ public class BookCustomRepository {
     private BooleanExpression bookIdEq(Long bookId) {
         return isEmpty(bookId) ? null : book.bookId.eq(bookId);
     }
+
+    private BooleanExpression bookTitleContains(String bookTitle) {
+        return isEmpty(bookTitle) ? null : book.title.contains(bookTitle);
+    }
+
+    private BooleanExpression bookAuthorContains(String bookAuthor) {
+        return isEmpty(bookAuthor) ? null : book.author.contains(bookAuthor);
+    }
+
 
 }

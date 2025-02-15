@@ -37,9 +37,10 @@ public class BookServiceImpl implements BookService {
     @Cacheable(
             value = BOOK_INFO,
             key = "#bookId != null ? #bookId : 'allBookInfoKey'",
+            condition = "#bookId != null || (#bookTitle == null && #bookAuthor == null)",
             unless = "#result == null or #result.isEmpty()")
-    public List<BookInfoResponse> getBookInfo(Long bookId) {
-        return bookCustomRepository.getBookInfo(bookId);
+    public List<BookInfoResponse> getBookInfo(Long bookId, String bookTitle, String bookAuthor) {
+        return bookCustomRepository.getBookInfo(bookId, bookTitle, bookAuthor);
     }
 
     @Override

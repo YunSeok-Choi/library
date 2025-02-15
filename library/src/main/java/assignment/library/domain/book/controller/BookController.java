@@ -36,9 +36,11 @@ public class BookController {
     // 도서 조회
     @GetMapping("/info")
     @Operation(summary = "도서 정보 조회", description = "도서 정보 조회 API")
-    public ResponseEntity<?> bookInfo(@RequestParam(required = false) Long bookId) {
+    public ResponseEntity<?> bookInfo(@RequestParam(required = false) Long bookId,
+                                      @RequestParam(required = false) String bookTitle,
+                                      @RequestParam(required = false) String bookAuthor) {
 
-        List<BookInfoResponse> bookInfo = bookService.getBookInfo(bookId);
+        List<BookInfoResponse> bookInfo = bookService.getBookInfo(bookId, bookTitle, bookAuthor);
         if (bookInfo.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
