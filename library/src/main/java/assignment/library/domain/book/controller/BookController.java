@@ -4,8 +4,11 @@ import assignment.library.domain.book.dto.request.RegisterBookRequest;
 import assignment.library.domain.book.dto.request.UpdateBookRequest;
 import assignment.library.domain.book.dto.response.BookInfoResponse;
 import assignment.library.domain.book.service.BookService;
-import assignment.library.domain.user.dto.response.UserInfoResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,8 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
+import static assignment.library.domain.book.dto.BookConstants.*;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -27,25 +30,40 @@ public class BookController {
 
     private final BookService bookService;
 
-    // 도서 등록
     @PostMapping("/register")
-    @Operation(summary = "도서 등록", description = "도서 등록 API")
+    @Operation(summary = "도서 등록", description = "도서 등록 API", responses = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "도서 등록 성공")
+    })
     public ResponseEntity<?> registerBook(@Validated @RequestBody RegisterBookRequest registerBookRequest) {
         bookService.registerBook(registerBookRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    // 도서 조회
     @GetMapping("/info")
-    @Operation(summary = "도서 정보 조회", description = "도서 정보 조회 API")
-    public ResponseEntity<?> bookInfo(@RequestParam(required = false) Long bookId,
-                                      @RequestParam(required = false) String bookTitle,
-                                      @RequestParam(required = false) String bookAuthor,
-                                      @RequestParam(required = false) String bookTag,
-                                      @RequestParam(required = false) String sorted,
-                                      Pageable pageable) {
+    @Operation(summary = "도서 정보 조회", description = "도서 정보 조회 API", responses = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "도서 조회 성공",
+                    content = @Content(schema = @Schema(implementation = BookInfoResponse.class))),
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "존재하지 않는 리소스 접근")
+    })
+    public ResponseEntity<?> bookInfo(
+            @Parameter(name = "bookId", description = BOOK_ID) @RequestParam(required = false) Long bookId,
+            @Parameter(name = "title", description = BOOK_TITLE) @RequestParam(required = false) String bookTitle,
+            @Parameter(name = "author", description = BOOK_AUTHOR) @RequestParam(required = false) String bookAuthor,
+            @Parameter(name = "tag", description = BOOK_TAG) @RequestParam(required = false) String bookTag,
+            @Parameter(name = "title", description = "정렬 기준(title, publishedDate)")
+            @RequestParam(required = false) String sorted,
+            @Parameter(name = "page, size", description = "페이지 번호, 한 페이지에 들어가는 데이터 수") Pageable pageable) {
 
-        Page<BookInfoResponse> bookInfo = bookService.getBookInfo(bookId, bookTitle, bookTag, bookAuthor, sorted, pageable);
+        Page<BookInfoResponse> bookInfo = bookService.getBookInfo(
+                bookId, bookTitle, bookTag,
+                bookAuthor, sorted, pageable);
+
         if (bookInfo.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
@@ -53,19 +71,29 @@ public class BookController {
         return ResponseEntity.status(OK).body(bookInfo);
     }
 
-    // 도서 수정
     @PutMapping("/update")
-    @Operation(summary = "도서 정보 수정", description = "도서 정보 수정 API")
-    public ResponseEntity<?> updateBook(@RequestParam(required = false) Long bookId,
-                                        @Validated @RequestBody UpdateBookRequest updateBookRequest) {
+    @Operation(summary = "도서 정보 수정", description = "도서 정보 수정 API", responses = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "도서 수정 성공")
+    })
+    public ResponseEntity<?> updateBook(
+            @Parameter(name = EX_BOOK_ID, description = BOOK_ID) @RequestParam(required = false) Long bookId,
+            @Validated @RequestBody UpdateBookRequest updateBookRequest) {
+
         bookService.updateBook(bookId, updateBookRequest);
         return ResponseEntity.status(OK).build();
     }
 
-    // 도서 삭제
     @DeleteMapping("/delete")
-    @Operation(summary = "도서 삭제", description = "도서 삭제 API")
-    public ResponseEntity<?> deleteBook(@RequestParam(required = false) Long bookId) {
+    @Operation(summary = "도서 삭제", description = "도서 삭제 API", responses = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "도서 삭제 성공")
+    })
+    public ResponseEntity<?> deleteBook(
+            @Parameter(name = EX_BOOK_ID, description = BOOK_ID) @RequestParam(required = false) Long bookId) {
+
         bookService.deleteBook(bookId);
         return ResponseEntity.status(OK).build();
     }

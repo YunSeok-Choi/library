@@ -1,29 +1,41 @@
 package assignment.library.domain.book.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 
 import java.time.LocalDate;
 
+import static assignment.library.domain.book.dto.BookConstants.*;
+
 @Getter
+@Schema(description = "도서 수정 요청 DTO")
 public class UpdateBookRequest {
-    @NotNull(message = "책 제목을 입력해 주세요.")
+
+    @Schema(description = BOOK_TITLE, example = EX_BOOK_TITLE)
+    @NotNull(message = CHECK_BOOK_TITLE)
     private String title;
 
-    @NotNull(message = "작가 이름을 입력해 주세요.")
+    @Schema(description = BOOK_AUTHOR, example = EX_BOOK_AUTHOR)
+    @NotNull(message = CHECK_BOOK_AUTHOR)
     private String author;
 
-    @NotBlank(message = "국제표준도서번호를 입력해 주세요.")
+    @Schema(description = BOOK_ISBN, example = EX_BOOK_ISBN)
+    @NotBlank(message = CHECK_BOOK_ISBN)
     private String isbn;
 
-    @NotNull(message = "출판사를 입력해 주세요.")
+    @Schema(description = BOOK_PUBLISHER, example = EX_BOOK_PUBLISHER)
+    @NotNull(message = CHECK_BOOK_PUBLISHER)
     private String publisher;
 
-    @NotNull(message = "출판일을 입력해 주세요.")
-    @PastOrPresent(message = "과거 혹은 오늘의 날짜로 입력해주세요.")
+    @Schema(description = BOOK_PUBLISHED_DATE, example = EX_BOOK_PUBLISHED_DATE)
+    @NotNull(message = CHECK_BOOK_PUBLISHED_DATE)
+    @PastOrPresent(message = CHECK_BOOK_PastOrPresent_DATE)
     private LocalDate publishedDate;
 
+    @Schema(description = BOOK_CATEGORY, example = EX_BOOK_CATEGORY)
     private String category;
 
+    @Schema(description = BOOK_TAG, example = EX_BOOK_TAG)
     private String tag;
 }
