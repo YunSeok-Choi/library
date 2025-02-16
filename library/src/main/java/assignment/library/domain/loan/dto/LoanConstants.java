@@ -25,5 +25,10 @@ public class LoanConstants {
     public static final String LOAN_USER_ID = "대출하려는 사용자의 ID를 입력해주세요.";
     public static final String LOAN_BOOK_ID = "대출하려는 도서의 ID를 입력해주세요.";
 
+    // 로그
+    public static final String LOG_LOAN_BOOK = "도서 대출";
+    public static final String LOG_LOAN_INFO = "대출 조회";
+    public static final String LOG_LOAN_RETURN = "도서 반납";
+
 
 }

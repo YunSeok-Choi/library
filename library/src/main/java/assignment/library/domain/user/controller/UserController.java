@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,10 +21,10 @@ import java.util.List;
 
 import static assignment.library.domain.book.dto.BookConstants.BOOK_ID;
 import static assignment.library.domain.book.dto.BookConstants.EX_BOOK_ID;
-import static assignment.library.domain.user.dto.UserConstants.EX_USER_ID;
-import static assignment.library.domain.user.dto.UserConstants.USER_ID;
+import static assignment.library.domain.user.dto.UserConstants.*;
 import static org.springframework.http.HttpStatus.OK;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
@@ -39,6 +40,7 @@ public class UserController {
                     description = "회원가입 성공")
     })
     public ResponseEntity<?> signUp(@Validated @RequestBody SignUpRequest signUpRequest) {
+        log.info(LOG_USER_SIGNUP);
         userService.signUp(signUpRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -55,7 +57,7 @@ public class UserController {
     })
     public ResponseEntity<?> userInfo(
             @Parameter(name = "userId", description = USER_ID) @RequestParam(required = false) Long userId) {
-
+        log.info(LOG_USER_INFO);
         List<UserInfoResponse> userInfo = userService.getUserInfo(userId);
         if (userInfo.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

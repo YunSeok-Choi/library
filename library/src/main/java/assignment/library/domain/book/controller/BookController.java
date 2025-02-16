@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import static assignment.library.domain.book.dto.BookConstants.*;
 import static org.springframework.http.HttpStatus.OK;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/book")
 @RequiredArgsConstructor
@@ -37,6 +39,7 @@ public class BookController {
                     description = "도서 등록 성공")
     })
     public ResponseEntity<?> registerBook(@Validated @RequestBody RegisterBookRequest registerBookRequest) {
+        log.info(LOG_BOOK_REGISTER);
         bookService.registerBook(registerBookRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -60,6 +63,8 @@ public class BookController {
             @RequestParam(required = false) String sorted,
             @Parameter(name = "page, size", description = "페이지 번호, 한 페이지에 들어가는 데이터 수") Pageable pageable) {
 
+        log.info(LOG_BOOK_INFO);
+
         Page<BookInfoResponse> bookInfo = bookService.getBookInfo(
                 bookId, bookTitle, bookTag,
                 bookAuthor, sorted, pageable);
@@ -80,7 +85,7 @@ public class BookController {
     public ResponseEntity<?> updateBook(
             @Parameter(name = EX_BOOK_ID, description = BOOK_ID) @RequestParam(required = false) Long bookId,
             @Validated @RequestBody UpdateBookRequest updateBookRequest) {
-
+        log.info(LOG_BOOK_UPDATE);
         bookService.updateBook(bookId, updateBookRequest);
         return ResponseEntity.status(OK).build();
     }
@@ -93,7 +98,7 @@ public class BookController {
     })
     public ResponseEntity<?> deleteBook(
             @Parameter(name = EX_BOOK_ID, description = BOOK_ID) @RequestParam(required = false) Long bookId) {
-
+        log.info(LOG_BOOK_DELETE);
         bookService.deleteBook(bookId);
         return ResponseEntity.status(OK).build();
     }

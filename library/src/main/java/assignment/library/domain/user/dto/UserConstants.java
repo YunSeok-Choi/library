@@ -26,4 +26,9 @@ public class UserConstants {
     public static final String CHECK_USER_EMAIL_FORM = "xxxx@xxxx.com 형식으로 입력해주세요";
     public static final String CHECK_USER_PASSWORD = "사용자 비밀번호를 입력해주세요.";
     public static final String CHECK_USER_PASSWORD_MAX = "사용자 비밀번호는 32자가 넘을 수 없습니다";
+
+    // 로그
+    public static final String LOG_USER_INFO = "사용자 조회";
+    public static final String LOG_USER_SIGNUP = "사용자 가입";
+
 }

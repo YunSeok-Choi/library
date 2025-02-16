@@ -38,6 +38,10 @@ public class BookConstants {
     public static final String CHECK_BOOK_PUBLISHED_DATE = "출판일을 입력해 주세요.";
     public static final String CHECK_BOOK_PastOrPresent_DATE = "과거 혹은 오늘의 날짜로 입력해주세요.";
 
-
+    // 로그
+    public static final String LOG_BOOK_INFO = "도서 조회";
+    public static final String LOG_BOOK_REGISTER = "도서 등록";
+    public static final String LOG_BOOK_UPDATE = "도서 수정";
+    public static final String LOG_BOOK_DELETE = "도서 삭제";
 
 }
