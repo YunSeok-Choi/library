@@ -106,7 +106,7 @@ jobs:
           if [[ -z "$PREV_VERSION" ]]; then
             NEW_VERSION="v1.0.0"
           else
-            NEW_VERSION="v$(echo $PREV_VERSION | awk -F. '{$NF++; print $0}' OFS=.)"
+            NEW_VERSION="$(echo $PREV_VERSION | awk -F. '{$NF++; print $0}' OFS=.)"
           fi
 
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
