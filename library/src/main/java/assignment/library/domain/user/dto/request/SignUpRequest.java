@@ -2,10 +2,7 @@ package assignment.library.domain.user.dto.request;
 
 import assignment.library.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +16,7 @@ import static assignment.library.domain.user.dto.UserConstants.*;
 @Schema(description = "회원 가입 요청 DTO")
 public class SignUpRequest {
 
-    @Max(value = 32, message = CHECK_USER_NAME_MAX)
+    @Size(min = 5, max = 32, message = CHECK_USER_NAME_MAX)
     @NotBlank(message = CHECK_USER_NAME)
     @Schema(description = USER_NAME, example = EX_USER_NAME)
     private String userName;
@@ -29,7 +26,7 @@ public class SignUpRequest {
     @Schema(description = USER_EMAIL, example = EX_USER_EMAIL)
     private String userEmail;
 
-    @Max(value = 32, message = CHECK_USER_PASSWORD_MAX)
+    @Size(min = 5, max = 32, message = CHECK_USER_PASSWORD_MAX)
     @NotBlank(message = CHECK_USER_PASSWORD)
     @Schema(description = USER_PASSWORD, example = EX_USER_PASSWORD)
     private String userPassword;
