@@ -16,7 +16,7 @@ import static assignment.library.domain.user.dto.UserConstants.*;
 @Schema(description = "회원 가입 요청 DTO")
 public class SignUpRequest {
 
-    @Size(min = 5, max = 32, message = CHECK_USER_NAME_MAX)
+    @Size(min = 1, max = 32, message = CHECK_USER_NAME_MAX)
     @NotBlank(message = CHECK_USER_NAME)
     @Schema(description = USER_NAME, example = EX_USER_NAME)
     private String userName;
