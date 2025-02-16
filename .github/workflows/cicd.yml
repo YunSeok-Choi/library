@@ -125,9 +125,6 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/library:${NEW_VERSION}
           docker push ${{ secrets.DOCKER_USERNAME }}/library:latest
 
-          git tag $NEW_VERSION
-          git push origin $NEW_VERSION
-
       # docker build & push to develop
       - name: Docker build & push to dev
         if: contains(github.ref, 'develop')
@@ -139,9 +136,6 @@ jobs:
 
           docker push ${{ secrets.DOCKER_USERNAME }}/library-dev:${NEW_VERSION}
           docker push ${{ secrets.DOCKER_USERNAME }}/library-dev:latest
-
-          git tag $NEW_VERSION
-          git push origin $NEW_VERSION
 
       ## deploy to production
       - name: Deploy to prod
