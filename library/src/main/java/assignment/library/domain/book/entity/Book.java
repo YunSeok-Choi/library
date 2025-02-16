@@ -2,16 +2,16 @@ package assignment.library.domain.book.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Entity
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Book {
 
@@ -25,7 +25,9 @@ public class Book {
     private String publisher;
     private LocalDate publishedDate;
     private String category;
-    private String tag;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<BookTag> bookTags = new HashSet<>();
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -48,8 +50,8 @@ public class Book {
     }
 
     @Builder
-    public Book(Long bookId, String title, String author, String isbn, String publisher, LocalDate publishedDate,
-                String category, String tag, BookStatus status, LocalDateTime createdAt) {
+    public Book(Long bookId, String title, String author, String isbn, String publisher,
+                LocalDate publishedDate, String category, BookStatus status, LocalDateTime createdAt) {
         this.bookId = bookId;
         this.title = title;
         this.author = author;
@@ -57,7 +59,6 @@ public class Book {
         this.publisher = publisher;
         this.publishedDate = publishedDate;
         this.category = category;
-        this.tag = tag;
         this.status = status;
         this.createdAt = createdAt;
     }

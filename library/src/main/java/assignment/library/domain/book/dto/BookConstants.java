@@ -14,8 +14,8 @@ public class BookConstants {
     public static final String EX_BOOK_AUTHOR = "한강";
     public static final String EX_BOOK_PUBLISHER = "창비";
     public static final String EX_BOOK_CATEGORY = "소설";
-    public static final String EX_BOOK_ISBN = "9788936433598";
-    public static final String EX_BOOK_TAG = "한국";
+    public static final String EX_BOOK_ISBN = "978-893-643-359-8";
+//    public static final String EX_BOOK_TAG = "['한국', '노벨상']";
     public static final String EX_BOOK_PUBLISHED_DATE = "2007-10-30";
     public static final String EX_BOOK_STATUS = "대출 가능";
 

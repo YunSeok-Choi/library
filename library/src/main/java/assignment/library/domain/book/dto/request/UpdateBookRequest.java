@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import static assignment.library.domain.book.dto.BookConstants.*;
 
@@ -36,6 +37,6 @@ public class UpdateBookRequest {
     @Schema(description = BOOK_CATEGORY, example = EX_BOOK_CATEGORY)
     private String category;
 
-    @Schema(description = BOOK_TAG, example = EX_BOOK_TAG)
-    private String tag;
+    @Schema(description = BOOK_TAG)
+    private Set<String> tags;
 }

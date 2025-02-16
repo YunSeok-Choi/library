@@ -1,16 +1,10 @@
 package assignment.library.domain.loan.dto.response;
 
-import assignment.library.domain.book.entity.BookStatus;
-import assignment.library.domain.loan.entity.LoanStatus;
-import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.Set;
 
 import static assignment.library.domain.book.dto.BookConstants.*;
 import static assignment.library.domain.book.dto.BookConstants.EX_BOOK_TITLE;
@@ -63,8 +57,8 @@ public class LoanStatusResponse {
     @Schema(description = BOOK_CATEGORY, example = EX_BOOK_CATEGORY)
     private String category;
 
-    @Schema(description = BOOK_TAG, example = EX_BOOK_TAG)
-    private String tag;
+    @Schema(description = BOOK_TAG)
+    private Set<String> tags;
 
     @Schema(description = BOOK_STATUS, example = EX_BOOK_STATUS)
     private String bookStatus;
@@ -73,7 +67,7 @@ public class LoanStatusResponse {
     public LoanStatusResponse(Long loanId, String userName, Long bookId, String loanDate,
                               String dueDate, String returnDate, String loanStatus,
                               String title, String author, String isbn, String publisher,
-                              LocalDate publishedDate, String category, String tag, String bookStatus) {
+                              LocalDate publishedDate, String category, Set<String> tags, String bookStatus) {
         this.loanId = loanId;
         this.userName = userName;
         this.bookId = bookId;
@@ -87,7 +81,7 @@ public class LoanStatusResponse {
         this.publisher = publisher;
         this.publishedDate = publishedDate;
         this.category = category;
-        this.tag = tag;
+        this.tags = tags;
         this.bookStatus = bookStatus;
     }
 }

@@ -1,12 +1,9 @@
 package assignment.library.domain.loan.controller;
 
-import assignment.library.domain.book.dto.response.BookInfoResponse;
 import assignment.library.domain.loan.dto.request.LoanBookRequest;
 import assignment.library.domain.loan.dto.response.LoanStatusResponse;
 import assignment.library.domain.loan.service.LoanService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import static assignment.library.domain.book.dto.BookConstants.BOOK_ID;
-import static assignment.library.domain.book.dto.BookConstants.EX_BOOK_ID;
 
 @RestController
 @RequestMapping("/api/loan")

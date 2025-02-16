@@ -28,8 +28,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserInfoResponse> getUserInfo(Long userId) {
-
         return userCustomRepository.getUsersInfo(userId);
-
     }
 }

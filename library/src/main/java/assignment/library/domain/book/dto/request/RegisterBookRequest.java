@@ -12,6 +12,7 @@ import org.hibernate.validator.constraints.ISBN;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import static assignment.library.domain.book.dto.BookConstants.*;
 import static org.hibernate.validator.constraints.ISBN.Type.ANY;
@@ -47,8 +48,8 @@ public class RegisterBookRequest {
     @Schema(description = BOOK_CATEGORY, example = EX_BOOK_CATEGORY)
     private String category;
 
-    @Schema(description = BOOK_TAG, example = EX_BOOK_TAG)
-    private String tag;
+    @Schema(description = BOOK_TAG)
+    private Set<String> tags;
 
     public Book toEntity() {
         return Book.builder()
@@ -58,7 +59,6 @@ public class RegisterBookRequest {
                 .publisher(publisher)
                 .publishedDate(publishedDate)
                 .category(category)
-                .tag(tag)
                 .status(BookStatus.AVAILABLE)
                 .createdAt(LocalDateTime.now())
                 .build();

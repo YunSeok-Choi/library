@@ -2,56 +2,92 @@ package assignment.library.domain.book.repository;
 
 import assignment.library.domain.book.dto.request.UpdateBookRequest;
 import assignment.library.domain.book.dto.response.BookInfoResponse;
-import assignment.library.domain.book.dto.response.QBookInfoResponse;
+import assignment.library.domain.book.entity.Book;
+import assignment.library.global.util.CustomPageImpl;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static assignment.library.domain.book.entity.QBook.book;
+import static assignment.library.domain.book.entity.QBookTag.bookTag;
+import static assignment.library.domain.book.entity.QTag.tag;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class BookCustomRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public Page<BookInfoResponse> getBookInfo(Long bookId, String bookTitle, String bookTag, String bookAuthor, String sorted, Pageable pageable) {
-        List<BookInfoResponse> bookList = queryFactory
-                .select(new QBookInfoResponse(book.bookId, book.title, book.author, book.isbn,
-                        book.publisher, book.publishedDate, book.category, book.tag, book.status))
+    public Page<BookInfoResponse> getBookInfo(Long bookId, String bookTitle, String tagName,
+                                              String bookAuthor, String sorted, Pageable pageable) {
+
+        List<Book> books = getBooksForCondition(bookId, bookTitle, bookAuthor, sorted, pageable);
+
+        List<Long> bookIds = books.stream()
+                .map(Book::getBookId)
+                .collect(Collectors.toList());
+
+        Map<Long, List<String>> bookTagsMap = getBookTagsMap(tagName, bookIds);
+
+        List<BookInfoResponse> content = books.stream()
+                .map(b -> new BookInfoResponse(
+                        b.getBookId(),
+                        b.getTitle(),
+                        b.getAuthor(),
+                        b.getIsbn(),
+                        b.getPublisher(),
+                        b.getPublishedDate(),
+                        b.getCategory(),
+                        bookTagsMap.getOrDefault(b.getBookId(), Collections.emptyList()), // 태그 없을 경우 빈 리스트 반환
+                        b.getStatus()
+                ))
+                .toList();
+
+        return new CustomPageImpl<>(content, pageable, (long) bookTagsMap.size());
+    }
+
+    private Map<Long, List<String>> getBookTagsMap(String tagName, List<Long> bookIds) {
+        return queryFactory
+                .select(book.bookId, tag.tagName)
                 .from(book)
+                .join(bookTag).on(book.bookId.eq(bookTag.book.bookId))
+                .join(tag).on(bookTag.tag.tagId.eq(tag.tagId))
+                .where(
+                        book.bookId.in(bookIds),
+                        bookTagContains(tagName)
+                )
+                .fetch()
+                .stream()
+                .collect(Collectors.groupingBy(
+                        tuple -> tuple.get(book.bookId),
+                        Collectors.mapping(tuple -> tuple.get(tag.tagName), Collectors.toList())
+                ));
+    }
+
+    private List<Book> getBooksForCondition(Long bookId, String bookTitle, String bookAuthor, String sorted, Pageable pageable) {
+        return queryFactory
+                .selectFrom(book)
                 .where(
                         bookIdEq(bookId),
                         bookTitleContains(bookTitle),
-                        bookTagContains(bookTag),
                         bookAuthorContains(bookAuthor)
                 )
                 .orderBy(getSortOrder(sorted))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-
-        long total = queryFactory
-                .select(book)
-                .from(book)
-                .where(
-                        bookIdEq(bookId),
-                        bookTitleContains(bookTitle),
-                        bookTagContains(bookTag),
-                        bookAuthorContains(bookAuthor)
-                )
-                .fetch().size();
-
-        return new PageImpl<BookInfoResponse>(bookList, pageable, total);
     }
 
     public void updateBook(Long bookId, UpdateBookRequest updateBookRequest) {
@@ -63,8 +99,14 @@ public class BookCustomRepository {
                 .set(book.publisher, updateBookRequest.getPublisher())
                 .set(book.publishedDate, updateBookRequest.getPublishedDate())
                 .set(book.category, updateBookRequest.getCategory())
-                .set(book.tag, updateBookRequest.getTag())
                 .where(bookIdEq(bookId))
+                .execute();
+    }
+
+    public void deleteBookTag(Long bookId) {
+        queryFactory
+                .delete(bookTag)
+                .where(bookTag.book.bookId.eq(bookId))
                 .execute();
     }
 
@@ -73,6 +115,14 @@ public class BookCustomRepository {
                 .delete(book)
                 .where(bookIdEq(bookId))
                 .execute();
+    }
+
+    public void getBookTag(Long bookId) {
+        queryFactory
+                .select(tag.tagName)
+                .from(tag)
+                .join(bookTag).on(bookTag.book.bookId.eq(bookId));
+
     }
 
     private BooleanExpression bookIdEq(Long bookId) {
@@ -84,7 +134,7 @@ public class BookCustomRepository {
     }
 
     private BooleanExpression bookTagContains(String bookTag) {
-        return isEmpty(bookTag) ? null : book.tag.contains(bookTag);
+        return isEmpty(bookTag) ? null : tag.tagName.contains(bookTag);
     }
 
     private BooleanExpression bookAuthorContains(String bookAuthor) {

@@ -5,6 +5,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 import static assignment.library.domain.loan.entity.QLoan.loan;
 
 @Repository
@@ -13,13 +15,11 @@ public class LoanCustomRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public Loan getLoanStatus(Long bookId) {
-
-        return queryFactory
+    public Optional<Loan> getLoanStatus(Long bookId) {
+        return Optional.ofNullable(queryFactory
                 .selectFrom(loan)
                 .where(loan.book.bookId.eq(bookId))
                 .orderBy(loan.loanDate.desc())
-                .fetchFirst();
-
+                .fetchFirst());
     }
 }
