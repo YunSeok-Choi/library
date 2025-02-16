@@ -6,6 +6,9 @@ on:
   push:
     branches: ["main", "develop"]
 
+permissions:
+  contents: write
+
 jobs:
   CI-CD:
     runs-on: ubuntu-latest
@@ -84,14 +87,23 @@ jobs:
       - name: Get Previous Version & Generate New Version
         id: get_version
         run: |
+          git config --global user.email "${{secrets.USER_EMAIL}}"
+          git config --global user.name "${{secrets.USER_NAME}}"
+
           PREV_VERSION=$(git tag | sort -V | tail -n 1)
+
           if [[ -z "$PREV_VERSION" ]]; then
             NEW_VERSION="v1.0.0"
           else
             NEW_VERSION="v$(echo $PREV_VERSION | awk -F. '{$NF++; print $0}' OFS=.)"
           fi
+
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
           echo "🔢 새 버전: $NEW_VERSION"
+          git tag $NEW_VERSION
+          git push origin $NEW_VERSION
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
 
       # docker build & push to production
       - name: Docker build & push to prod
