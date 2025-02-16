@@ -36,6 +36,7 @@ jobs:
         with:
           java-version: "17"
           distribution: "temurin"
+          fetch-depth: 0
 
       # 환경별 yml 파일 생성(1) - application.yml
       - name: make application.yml
@@ -97,6 +98,8 @@ jobs:
         run: |
           git config --global user.email "${{secrets.USER_EMAIL}}"
           git config --global user.name "${{secrets.USER_NAME}}"
+
+          git fetch --tags
 
           PREV_VERSION=$(git tag | sort -V | tail -n 1)
 
