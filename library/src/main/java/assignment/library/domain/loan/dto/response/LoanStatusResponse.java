@@ -52,7 +52,7 @@ public class LoanStatusResponse {
     private String publisher;
 
     @Schema(description = BOOK_PUBLISHED_DATE, example = EX_BOOK_PUBLISHED_DATE)
-    private LocalDate publishedDate;
+    private String publishedDate;
 
     @Schema(description = BOOK_CATEGORY, example = EX_BOOK_CATEGORY)
     private String category;
@@ -79,7 +79,7 @@ public class LoanStatusResponse {
         this.author = author;
         this.isbn = isbn;
         this.publisher = publisher;
-        this.publishedDate = publishedDate;
+        this.publishedDate = publishedDate.toString();
         this.category = category;
         this.tags = tags;
         this.bookStatus = bookStatus;
