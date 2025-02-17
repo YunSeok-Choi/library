@@ -29,6 +29,7 @@ public class BookConstants {
     public static final String BOOK_TAG = "도서 태그";
     public static final String BOOK_PUBLISHED_DATE = "출판일";
     public static final String BOOK_STATUS = "대출 여부";
+    public static final String BOOK_SORTED ="정렬 기준(title, publishedDate)";
 
     // 검증
     public static final String CHECK_BOOK_TITLE = "책 제목을 입력해 주세요.";

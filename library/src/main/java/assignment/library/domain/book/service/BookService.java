@@ -44,9 +44,9 @@ public class BookService {
     @Cacheable(
             value = BOOK_INFO,
             key = "#bookId != null ? #bookId : 'allBookInfoKey'",
-            condition = "#bookId != null || " +
-                    "(#bookTitle == null && #bookAuthor == null && #sorted == null && #bookTag == null)",
-            unless = "#result == null or #result.isEmpty()")
+            condition = "#bookId != null ",
+            unless = "#bookTitle == null && #bookAuthor == null && #sorted == null && #bookTag == null"
+    )
     public Page<BookInfoResponse> getBookInfo(Long bookId, String bookTitle, String bookTag,
                                               String bookAuthor, String sorted, Pageable pageable) {
         return bookCustomRepository.getBookInfo(bookId, bookTitle, bookTag, bookAuthor, sorted, pageable);

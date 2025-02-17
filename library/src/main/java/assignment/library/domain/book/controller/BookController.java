@@ -56,15 +56,13 @@ public class BookController {
     })
     public ResponseEntity<?> bookInfo(
             @Parameter(name = "bookId", description = BOOK_ID) @RequestParam(required = false) Long bookId,
-            @Parameter(name = "title", description = BOOK_TITLE) @RequestParam(required = false) String bookTitle,
-            @Parameter(name = "author", description = BOOK_AUTHOR) @RequestParam(required = false) String bookAuthor,
-            @Parameter(name = "tag", description = BOOK_TAG) @RequestParam(required = false) String bookTag,
-            @Parameter(name = "sorted", description = "정렬 기준(title, publishedDate)")
-            @RequestParam(required = false) String sorted,
+            @Parameter(name = "bookTitle", description = BOOK_TITLE) @RequestParam(required = false) String bookTitle,
+            @Parameter(name = "bookAuthor", description = BOOK_AUTHOR) @RequestParam(required = false) String bookAuthor,
+            @Parameter(name = "bookTag", description = BOOK_TAG) @RequestParam(required = false) String bookTag,
+            @Parameter(name = "sorted", description = BOOK_SORTED) @RequestParam(required = false) String sorted,
             @Parameter(name = "page, size", description = "페이지 번호, 한 페이지에 들어가는 데이터 수") Pageable pageable) {
 
         log.info(LOG_BOOK_INFO);
-
         Page<BookInfoResponse> bookInfo = bookService.getBookInfo(
                 bookId, bookTitle, bookTag,
                 bookAuthor, sorted, pageable);
@@ -83,7 +81,7 @@ public class BookController {
                     description = "도서 수정 성공")
     })
     public ResponseEntity<?> updateBook(
-            @Parameter(name = EX_BOOK_ID, description = BOOK_ID) @RequestParam(required = false) Long bookId,
+            @Parameter(name = "bookId", description = BOOK_ID) @RequestParam(required = false) Long bookId,
             @Validated @RequestBody UpdateBookRequest updateBookRequest) {
         log.info(LOG_BOOK_UPDATE);
         bookService.updateBook(bookId, updateBookRequest);
@@ -97,7 +95,7 @@ public class BookController {
                     description = "도서 삭제 성공")
     })
     public ResponseEntity<?> deleteBook(
-            @Parameter(name = EX_BOOK_ID, description = BOOK_ID) @RequestParam(required = false) Long bookId) {
+            @Parameter(name = "bookId", description = BOOK_ID) @RequestParam(required = false) Long bookId) {
         log.info(LOG_BOOK_DELETE);
         bookService.deleteBook(bookId);
         return ResponseEntity.status(OK).build();

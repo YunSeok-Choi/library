@@ -6,34 +6,55 @@
 <br> </br>
 
 # 사용 서비스
+
 ## 백엔드
+
 ### Jdk17
+
 ### Spring boot
+
 ### Spring Data JPA
+
 ### Query-dsl
+
 <br> </br>
 
 ## DB
+
 ### MySQL
+
 ### Redis
+
 <br> </br>
 
 ## Monitoring
+
 ### Prometheus
+
 ### grafana
+
 ### Loki
+
 <br> </br>
 
 ## Infra
+
 ### AWS EC2
+
 ### Ubuntu 20.04.6 LTS
+
 ### Docker
+
 ### Docker compose
+
 ### Node Exporter
+
 <br> </br>
 
 # 프로젝트 설정
+
 ## 백엔드 설정 파일 (application.yml)
+
 ```yaml
 server:
   port: 8080
@@ -96,7 +117,6 @@ management:
   health:
     defaults:
       enabled: true
-
 ```
 
 ## 프로메테우스 설정 파일(prometheus.yml)
@@ -119,8 +139,8 @@ scrape_configs:
   - job_name: node
     static_configs:
       - targets: ["host.docker.internal:9100"]
-
 ```
+
 <br> </br>
 
 # 배포 설정
@@ -183,11 +203,51 @@ services:
     ports:
       - "9090:9090"
     networks:
+      - webnet
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        mkdir -p /etc/grafana/provisioning/datasources
+        cat <<EOF > /etc/grafana/provisioning/datasources/ds.yaml
+        apiVersion: 1
+        datasources:
+        - name: Loki
+          type: loki
+          access: proxy
+          orgId: 1
+          url: http://loki:3100
+          basicAuth: false
+          isDefault: true
+          version: 1
+          editable: false
+        EOF
+        /run.sh
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - webnet
+
+  loki:
+    container_name: loki
+    image: grafana/loki
+    ports:
+      - "3100:3100"
+    networks:
+      - webnet
 ```
+
 <br> </br>
 
-
 # 서비스 실행
+
+mysql에는 library 스키마가 존재해야 합니다.
 
 ```bash
 # 해당 docker-compose.yml 경로가 있는곳에서

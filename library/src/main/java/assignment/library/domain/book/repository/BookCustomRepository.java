@@ -6,6 +6,7 @@ import assignment.library.domain.book.entity.Book;
 import assignment.library.global.util.CustomPageImpl;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,7 @@ public class BookCustomRepository {
 
         List<Book> books = getBooksForCondition(bookId, bookTitle, bookAuthor, sorted, pageable);
 
+        log.info("book info 쿼리 실행");
         List<Long> bookIds = books.stream()
                 .map(Book::getBookId)
                 .collect(Collectors.toList());
@@ -55,15 +57,23 @@ public class BookCustomRepository {
                 ))
                 .toList();
 
-        return new CustomPageImpl<>(content, pageable, (long) bookTagsMap.size());
+        long total = queryFactory
+                .selectFrom(book)
+                .where(
+                        bookIdEq(bookId),
+                        bookTitleContains(bookTitle),
+                        bookAuthorContains(bookAuthor)
+                ).fetch().size();
+
+        return new CustomPageImpl<>(content, pageable, total);
     }
 
     private Map<Long, List<String>> getBookTagsMap(String tagName, List<Long> bookIds) {
         return queryFactory
                 .select(book.bookId, tag.tagName)
                 .from(book)
-                .join(bookTag).on(book.bookId.eq(bookTag.book.bookId))
-                .join(tag).on(bookTag.tag.tagId.eq(tag.tagId))
+                .leftJoin(bookTag).on(book.bookId.eq(bookTag.book.bookId))
+                .leftJoin(tag).on(bookTag.tag.tagId.eq(tag.tagId))
                 .where(
                         book.bookId.in(bookIds),
                         bookTagContains(tagName)
@@ -78,7 +88,8 @@ public class BookCustomRepository {
 
     private List<Book> getBooksForCondition(Long bookId, String bookTitle, String bookAuthor, String sorted, Pageable pageable) {
         return queryFactory
-                .selectFrom(book)
+                .select(book)
+                .from(book)
                 .where(
                         bookIdEq(bookId),
                         bookTitleContains(bookTitle),
@@ -130,15 +141,15 @@ public class BookCustomRepository {
     }
 
     private BooleanExpression bookTitleContains(String bookTitle) {
-        return isEmpty(bookTitle) ? null : book.title.contains(bookTitle);
+        return (bookTitle == null || bookTitle.trim().isEmpty()) ? null : book.title.contains(bookTitle);
     }
 
     private BooleanExpression bookTagContains(String bookTag) {
-        return isEmpty(bookTag) ? null : tag.tagName.contains(bookTag);
+        return (bookTag == null || bookTag.trim().isEmpty()) ? null : tag.tagName.contains(bookTag);
     }
 
     private BooleanExpression bookAuthorContains(String bookAuthor) {
-        return isEmpty(bookAuthor) ? null : book.author.contains(bookAuthor);
+        return (bookAuthor == null || bookAuthor.trim().isEmpty()) ? null : book.author.contains(bookAuthor);
     }
 
     private OrderSpecifier<?> getSortOrder(String sorted) {
