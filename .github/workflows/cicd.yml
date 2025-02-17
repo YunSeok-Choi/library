@@ -122,8 +122,8 @@ jobs:
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
-          docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/library:${NEW_VERSION} .
-          docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/library:latest .
+          docker build --no-cache -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/library:${NEW_VERSION} .
+          docker build --no-cache -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/library:latest .
 
           docker push ${{ secrets.DOCKER_USERNAME }}/library:${NEW_VERSION}
           docker push ${{ secrets.DOCKER_USERNAME }}/library:latest
@@ -134,8 +134,8 @@ jobs:
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
-          docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/library-dev:${NEW_VERSION} .
-          docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/library-dev:latest .
+          docker build --no-cache -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/library-dev:${NEW_VERSION} .
+          docker build --no-cache -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/library-dev:latest .
 
           docker push ${{ secrets.DOCKER_USERNAME }}/library-dev:${NEW_VERSION}
           docker push ${{ secrets.DOCKER_USERNAME }}/library-dev:latest

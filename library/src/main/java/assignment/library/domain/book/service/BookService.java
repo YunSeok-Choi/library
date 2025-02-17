@@ -5,10 +5,7 @@ import assignment.library.domain.book.dto.request.UpdateBookRequest;
 import assignment.library.domain.book.dto.response.BookInfoResponse;
 import assignment.library.domain.book.entity.Book;
 import assignment.library.domain.book.entity.BookTag;
-import assignment.library.domain.book.repository.BookCustomRepository;
-import assignment.library.domain.book.repository.BookRepository;
-import assignment.library.domain.book.repository.BookTagRepository;
-import assignment.library.domain.book.repository.TagRepository;
+import assignment.library.domain.book.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -69,6 +66,7 @@ public class BookService {
             @CacheEvict(value = LOAN_STATUS, key = "#bookId")
     })
     public void deleteBook(Long bookId) {
+        bookCustomRepository.deleteBookTag(bookId);
         bookCustomRepository.deleteBook(bookId);
     }
 
