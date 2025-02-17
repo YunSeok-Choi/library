@@ -1,6 +1,5 @@
 package assignment.library.domain.user.controller;
 
-import assignment.library.domain.loan.dto.response.LoanStatusResponse;
 import assignment.library.domain.user.dto.request.SignUpRequest;
 import assignment.library.domain.user.dto.response.UserInfoResponse;
 import assignment.library.domain.user.service.UserService;
@@ -19,8 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static assignment.library.domain.book.dto.BookConstants.BOOK_ID;
-import static assignment.library.domain.book.dto.BookConstants.EX_BOOK_ID;
 import static assignment.library.domain.user.dto.UserConstants.*;
 import static org.springframework.http.HttpStatus.OK;
 
