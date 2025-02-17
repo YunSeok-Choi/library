@@ -150,6 +150,7 @@ jobs:
           username: ubuntu
           port: 22
           key: ${{ secrets.PEM_KEY }}
+          envs: NEW_VERSION
           script: |
             cd Library
             chmod +x deploy.sh
@@ -165,6 +166,7 @@ jobs:
           username: ubuntu
           port: 22
           key: ${{ secrets.PEM_KEY }}
+          envs: NEW_VERSION
           script: |
             cd Library
             sudo chmod +x deploy.sh
