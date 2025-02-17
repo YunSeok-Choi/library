@@ -59,7 +59,7 @@ public class BookController {
             @Parameter(name = "title", description = BOOK_TITLE) @RequestParam(required = false) String bookTitle,
             @Parameter(name = "author", description = BOOK_AUTHOR) @RequestParam(required = false) String bookAuthor,
             @Parameter(name = "tag", description = BOOK_TAG) @RequestParam(required = false) String bookTag,
-            @Parameter(name = "title", description = "정렬 기준(title, publishedDate)")
+            @Parameter(name = "sorted", description = "정렬 기준(title, publishedDate)")
             @RequestParam(required = false) String sorted,
             @Parameter(name = "page, size", description = "페이지 번호, 한 페이지에 들어가는 데이터 수") Pageable pageable) {
 
